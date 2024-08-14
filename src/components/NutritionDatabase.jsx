@@ -5,19 +5,9 @@ function NutritionDatabase() {
     const [nutrition, setNutrition] = useState(null);
 
     const handleSearch = () => {
-        fetch(`https://trackapi.nutritionix.com/v2/natural/nutrients`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-app-id': 'YOUR_APP_ID',         // Replace with your Nutritionix app ID
-                'x-app-key': 'YOUR_APP_KEY',       // Replace with your Nutritionix app key
-            },
-            body: JSON.stringify({
-                query: food,
-            }),
-        })
+        fetch(`https://api.edamam.com/api/food-database/v2/parser?ingr=${food}&app_id=YOUR_APP_ID&app_key=YOUR_APP_KEY`)
         .then(response => response.json())
-        .then(data => setNutrition(data.foods[0]))
+        .then(data => setNutrition(data.parsed[0].food.nutrients))
         .catch(err => console.error(err));
     };
 
@@ -34,11 +24,11 @@ function NutritionDatabase() {
 
             {nutrition && (
                 <div>
-                    <h3>{nutrition.food_name}</h3>
-                    <p>Calories: {nutrition.nf_calories} kcal</p>
-                    <p>Protein: {nutrition.nf_protein} g</p>
-                    <p>Carbs: {nutrition.nf_total_carbohydrate} g</p>
-                    <p>Fat: {nutrition.nf_total_fat} g</p>
+                    <h3>Nutrition Information</h3>
+                    <p>Calories: {nutrition.ENERC_KCAL} kcal</p>
+                    <p>Protein: {nutrition.PROCNT} g</p>
+                    <p>Carbs: {nutrition.CHOCDF} g</p>
+                    <p>Fat: {nutrition.FAT} g</p>
                 </div>
             )}
         </div>

@@ -1,35 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function WorkoutPlans() {
-    const [plans, setPlans] = useState([
-        { name: 'Weight Loss Plan' },
-        { name: 'Muscle Gain Plan' },
-        { name: 'Endurance Plan' }
-    ]);
-    const [customPlan, setCustomPlan] = useState('');
+    const [plans, setPlans] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const addCustomPlan = () => {
-        if (customPlan) {
-            setPlans([...plans, { name: customPlan }]);
-            setCustomPlan('');
-        }
-    };
+    useEffect(() => {
+        fetch('https://wger.de/api/v2/workout/', {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => {
+            setPlans(data.results.slice(0, 10)); 
+            setLoading(false);
+        })
+        .catch(err => console.error(err));
+    }, []);
+
+    if (loading) return <p>Loading workout plans...</p>;
 
     return (
         <div>
             <h2>Workout Plans</h2>
             <ul>
                 {plans.map((plan, index) => (
-                    <li key={index}>{plan.name}</li>
+                    <li key={index}>
+                        <strong>{plan.name}</strong>
+                    </li>
                 ))}
             </ul>
-            <input
-                type="text"
-                placeholder="Add Custom Plan"
-                value={customPlan}
-                onChange={(e) => setCustomPlan(e.target.value)}
-            />
-            <button onClick={addCustomPlan}>Add Plan</button>
         </div>
     );
 }
