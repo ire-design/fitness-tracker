@@ -1,36 +1,34 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-function Login() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+function Login({ setUser }) {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
 
-    const handleLogin = () => {
-        const user = JSON.parse(localStorage.getItem('user'));
-        if (user && user.email === email && user.password === password) {
-            alert('Login successful!');
-        } else {
-            alert('Invalid credentials!');
-        }
-    };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Here you would typically validate the user against your backend
+    setUser({ email: formData.email });
+  };
 
-    return (
-        <div>
-            <h2>Login</h2>
-            <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
-            <button onClick={handleLogin}>Login</button>
-        </div>
-    );
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="email"
+        placeholder="Email"
+        value={formData.email}
+        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={formData.password}
+        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+      />
+      <button type="submit">Login</button>
+    </form>
+  );
 }
 
 export default Login;

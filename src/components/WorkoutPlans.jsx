@@ -1,35 +1,22 @@
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 function WorkoutPlans() {
-    const [plans, setPlans] = useState([]);
-    const [loading, setLoading] = useState(true);
+  const [plans, setPlans] = useState([
+    { id: 1, name: 'Weight Loss Plan', description: 'A plan focused on burning calories and losing weight.' },
+    { id: 2, name: 'Muscle Gain Plan', description: 'A plan designed to build muscle mass and strength.' },
+  ]);
 
-    useEffect(() => {
-        fetch('https://wger.de/api/v2/workout/', {
-            method: 'GET'
-        })
-        .then(response => response.json())
-        .then(data => {
-            setPlans(data.results.slice(0, 10)); 
-            setLoading(false);
-        })
-        .catch(err => console.error(err));
-    }, []);
-
-    if (loading) return <p>Loading workout plans...</p>;
-
-    return (
-        <div>
-            <h2>Workout Plans</h2>
-            <ul>
-                {plans.map((plan, index) => (
-                    <li key={index}>
-                        <strong>{plan.name}</strong>
-                    </li>
-                ))}
-            </ul>
+  return (
+    <div>
+      <h2>Workout Plans</h2>
+      {plans.map((plan) => (
+        <div key={plan.id}>
+          <h3>{plan.name}</h3>
+          <p>{plan.description}</p>
         </div>
-    );
+      ))}
+    </div>
+  );
 }
 
 export default WorkoutPlans;

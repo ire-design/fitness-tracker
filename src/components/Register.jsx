@@ -1,37 +1,41 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-function Register() {
-    const [user, setUser] = useState({ name: '', email: '', password: '' });
+function Register({ setUser }) {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+  });
 
-    const handleRegister = () => {
-        localStorage.setItem('user', JSON.stringify(user));
-        alert('User registered successfully!');
-    };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Here you would typically send the data to your backend
+    setUser(formData);
+  };
 
-    return (
-        <div>
-            <h2>Register</h2>
-            <input
-                type="text"
-                placeholder="Name"
-                value={user.name}
-                onChange={(e) => setUser({ ...user, name: e.target.value })}
-            />
-            <input
-                type="email"
-                placeholder="Email"
-                value={user.email}
-                onChange={(e) => setUser({ ...user, email: e.target.value })}
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                value={user.password}
-                onChange={(e) => setUser({ ...user, password: e.target.value })}
-            />
-            <button onClick={handleRegister}>Register</button>
-        </div>
-    );
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        placeholder="Name"
+        value={formData.name}
+        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+      />
+      <input
+        type="email"
+        placeholder="Email"
+        value={formData.email}
+        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={formData.password}
+        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+      />
+      <button type="submit">Register</button>
+    </form>
+  );
 }
 
 export default Register;

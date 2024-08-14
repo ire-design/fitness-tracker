@@ -1,35 +1,51 @@
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
-import Home from './components/Home';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Register from './components/Register';
 import Login from './components/Login';
-import UserProfile from './components/UserProfile';
+import Dashboard from './components/Dashboard';
 import WorkoutPlans from './components/WorkoutPlans';
-import ExerciseLibrary from './components/ExerciseLibrary';
-import NutritionDatabase from './components/NutritionDatabase';
+import Exercises from './components/Exercises';
+import Nutrition from './components/Nutrition';
 
 function App() {
-    return (
-        <Router>
-            <nav>
-                <Link to="/">Home</Link>
-                <Link to="/register">Register</Link>
-                <Link to="/login">Login</Link>
-                <Link to="/profile">Profile</Link>
-                <Link to="/workouts">Workouts</Link>
-                <Link to="/exercises">Exercises</Link>
-                <Link to="/nutrition">Nutrition</Link>
-            </nav>
-            <Switch>
-                <Route path="/" exact component={Home} />
-                <Route path="/register" component={Register} />
-                <Route path="/login" component={Login} />
-                <Route path="/profile" component={UserProfile} />
-                <Route path="/workouts" component={WorkoutPlans} />
-                <Route path="/exercises" component={ExerciseLibrary} />
-                <Route path="/nutrition" component={NutritionDatabase} />
-            </Switch>
-        </Router>
-    );
+  const [user, setUser] = useState(null);
+
+  return (
+    <Router>
+      <div>
+        <nav>
+          <ul>
+            <li><Link to="/">Home</Link></li>
+            {!user && (
+              <>
+                <li><Link to="/register">Register</Link></li>
+                <li><Link to="/login">Login</Link></li>
+              </>
+            )}
+            {user && (
+              <>
+                <li><Link to="/dashboard">Dashboard</Link></li>
+                <li><Link to="/workout-plans">Workout Plans</Link></li>
+                <li><Link to="/exercises">Exercises</Link></li>
+                <li><Link to="/nutrition">Nutrition</Link></li>
+                <li><button onClick={() => setUser(null)}>Logout</button></li>
+              </>
+            )}
+          </ul>
+        </nav>
+
+        <Routes>
+          <Route path="/register" element={<Register setUser={setUser} />} />
+          <Route path="/login" element={<Login setUser={setUser} />} />
+          <Route path="/dashboard" element={<Dashboard user={user} />} />
+          <Route path="/workout-plans" element={<WorkoutPlans />} />
+          <Route path="/exercises" element={<Exercises />} />
+          <Route path="/nutrition" element={<Nutrition />} />
+          <Route path="/" element={<h1>Welcome to Fitness and Nutrition Tracker</h1>} />
+        </Routes>
+      </div>
+    </Router>
+  );
 }
 
 export default App;
